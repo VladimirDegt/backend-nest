@@ -1,22 +1,15 @@
 import { Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { CatsModule } from './cats/cats.module';
 
 @Module({
-    controllers: [AppController],
-    providers: [AppService],
+    controllers: [],
+    providers: [],
     imports: [
-        SequelizeModule.forRoot({
-            dialect: 'postgres',
-            host: 'localhost',
-            port: 5432,
-            username: 'postgres',
-            password: 'root',
-            database: 'backend-nest',
-            models: [],
-            autoLoadModels: true,
-        }),
-    ],
+        CatsModule,
+        MongooseModule.forRoot(
+            'mongodb+srv://vladimirr:E0b2mNwKL1bG77j1@cluster0.ogz1o8j.mongodb.net/',
+        ),
+    ], 
 })
-export class AppModule { }
+export class AppModule {}
