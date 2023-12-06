@@ -13,15 +13,22 @@ export class UsersService {
         private roleService: RolesService
     ) { }
 
-  async createUser(dto: CreateUserDto):Promise<User>{
-      const user = new this.userRepository(dto);
-      const role = await this.roleService.getRoleByValue("USER");
-      await user.$set('roles', [role])
-      return user.save()
-  }
+    async createUser(dto: CreateUserDto):Promise<User>{
+        const user = new this.userRepository(dto);
+        const role = await this.roleService.getRoleByValue("USER");
+        await user.$set('roles', [role])
+        return user.save()
+    }
 
-  async getAllUsers(){
-      const users = await this.userRepository.find().populate('roles');
-      return users
-  }
+    async getAllUsers(){
+        const users = await this.userRepository.find().populate('roles');
+        return users
+    }
+
+    async getUserByEmail(email: string) {
+        const user = await this.userRepository
+          .findOne({ email })
+            .populate('roles');
+        return user
+    }
 }
