@@ -30,7 +30,7 @@ export class User {
 
   @ApiProperty({ example: 'За флуд', description: 'Причина блокування' })
   @Prop()
-  bnReason: string;
+  banReason: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
   roles: Role[];

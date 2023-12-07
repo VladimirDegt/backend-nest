@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from "./user.schema";
 import { Model } from "mongoose";
@@ -6,6 +6,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { RolesService } from 'src/roles/roles.service';
 import { AddRoleDto } from "./dto/add-role.dto";
 import { BanUserDto } from "./dto/ban-user.dto";
+import { HttpException } from "@nestjs/common/exceptions";
 
 @Injectable()
 export class UsersService {
@@ -37,20 +38,33 @@ export class UsersService {
     async addRole(dto: AddRoleDto) {
         const user = await this.userRepository.findOne({ _id: dto.userId });
         const role = await this.roleService.getRoleByValue(dto.value);
+
+        if(!user || !role){
+            throw new  HttpException('Користувач або роль не знайдено', HttpStatus.NOT_FOUND)
+        }
+
         const findRole = await this.userRepository.findOne({
           _id: dto.userId,
           roles: role,
         });
         
         if (findRole) {
-            console.log('Така роль вже існує');
-            return
+            throw new  HttpException('Така роль вже існує', HttpStatus.CONFLICT)
         }
+
         user.roles.push(role);
-        return user.save();
+        await user.save();
+        return dto
     }
 
     async ban(dto: BanUserDto) {
-        
+        const user = await this.userRepository.findOne({ _id: dto.userId });
+        if(!user){
+            throw new  HttpException('Користувача не знайдено', HttpStatus.NOT_FOUND)
+        }
+        user.banned = true;
+        user.banReason = dto.banReason;
+        await user.save();
+        return user
     }
 }
