@@ -17,7 +17,7 @@ export class UsersService {
 
     async createUser(dto: CreateUserDto):Promise<User>{
         const user = new this.userRepository(dto);
-        const role = await this.roleService.getRoleByValue("ADMIN");
+        const role = await this.roleService.getRoleByValue("USER");
         await user.$set('roles', [role])
         return user.save()
     }
@@ -29,16 +29,25 @@ export class UsersService {
 
     async getUserByEmail(email: string) {
         const user = await this.userRepository
-          .findOne({ email })
+            .findOne({ email })
             .populate('roles');
         return user
     }
 
     async addRole(dto: AddRoleDto) {
-        const user = await this.userRepository.findById(dto.userId);
+        const user = await this.userRepository.findOne({ _id: dto.userId });
         const role = await this.roleService.getRoleByValue(dto.value);
-        console.log("user-->", user)
-        console.log("role-->", role)
+        const findRole = await this.userRepository.findOne({
+          _id: dto.userId,
+          roles: role,
+        });
+        
+        if (findRole) {
+            console.log('Така роль вже існує');
+            return
+        }
+        user.roles.push(role);
+        return user.save();
     }
 
     async ban(dto: BanUserDto) {

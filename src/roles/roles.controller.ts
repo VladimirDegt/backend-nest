@@ -22,7 +22,7 @@ export class RolesController {
     @ApiResponse({
         status: 200, type: [Role]
     })
-    @Get(':value')
+    @Get('/:value')
     getByValue(@Param('value') value: string) {
         return this.rolesService.getRoleByValue(value)
     }
