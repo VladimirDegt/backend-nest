@@ -21,7 +21,7 @@ async function start() {
   // обмеження доступу до усіх роутів не залогіненим користувачам
   // app.useGlobalGuards(JwtAuthGuard)
   // глобальна валідація по пайпам
-  app.useGlobalPipes(new ValidationPipe())
+//   app.useGlobalPipes(new ValidationPipe())
 
   // connection
   await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`));

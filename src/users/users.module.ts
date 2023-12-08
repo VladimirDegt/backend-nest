@@ -7,6 +7,7 @@ import { Role, RoleSchema } from 'src/roles/roles.schema';
 import { RolesModule } from 'src/roles/roles.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { forwardRef } from '@nestjs/common/utils';
+import { Post, PostSchema } from 'src/posts/posts.schema';
 
 @Module({
   controllers: [UsersController],
@@ -16,6 +17,7 @@ import { forwardRef } from '@nestjs/common/utils';
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Role.name, schema: RoleSchema },
+      { name: Post.name, schema: PostSchema },
     ]),
     forwardRef(() => AuthModule),
   ],
