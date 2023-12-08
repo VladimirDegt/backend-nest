@@ -16,14 +16,23 @@ export class UsersService {
         private roleService: RolesService
     ) { }
 
-    async createUser(dto: CreateUserDto):Promise<User>{
+    async createUser(dto: CreateUserDto): Promise<User> {
+        const candidate = await this.userRepository.findOne({
+            email: dto.email,
+        });
+        if (candidate) {
+            throw new HttpException(
+                'Такий користувач існує',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
         const user = new this.userRepository(dto);
         const role = await this.roleService.getRoleByValue("USER");
         await user.$set('roles', [role])
         return user.save()
     }
 
-    async getAllUsers(){
+    async getAllUsers() {
         const users = await this.userRepository.find().populate('roles');
         return users
     }
@@ -36,20 +45,22 @@ export class UsersService {
     }
 
     async addRole(dto: AddRoleDto) {
-        const user = await this.userRepository.findOne({ _id: dto.userId });
+        const user = await this.userRepository.findOne({
+            _id: dto.userId,
+        });
         const role = await this.roleService.getRoleByValue(dto.value);
 
-        if(!user || !role){
-            throw new  HttpException('Користувач або роль не знайдено', HttpStatus.NOT_FOUND)
+        if (!user || !role) {
+            throw new HttpException('Користувач або роль не знайдено', HttpStatus.NOT_FOUND)
         }
 
         const findRole = await this.userRepository.findOne({
-          _id: dto.userId,
-          roles: role,
+            _id: dto.userId,
+            roles: role,
         });
-        
+
         if (findRole) {
-            throw new  HttpException('Така роль вже існує', HttpStatus.CONFLICT)
+            throw new HttpException('Така роль вже існує', HttpStatus.BAD_REQUEST)
         }
 
         user.roles.push(role);
@@ -59,8 +70,8 @@ export class UsersService {
 
     async ban(dto: BanUserDto) {
         const user = await this.userRepository.findOne({ _id: dto.userId });
-        if(!user){
-            throw new  HttpException('Користувача не знайдено', HttpStatus.NOT_FOUND)
+        if (!user) {
+            throw new HttpException('Користувача не знайдено', HttpStatus.NOT_FOUND)
         }
         user.banned = true;
         user.banReason = dto.banReason;

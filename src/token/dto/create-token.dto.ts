@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
@@ -7,7 +7,7 @@ import {
   NotContains,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class CreateTokenDto {
   @ApiProperty({
     example: 'example@gmail.com',
     description: 'Пошта користувача',

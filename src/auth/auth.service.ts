@@ -23,7 +23,7 @@ export class AuthService {
         const candidate = await this.userService.getUserByEmail(userDto.email)
         
         if (candidate) {
-            throw new HttpException('Користувач з такой поштою вже існує', HttpStatus.BAD_REQUEST)
+            throw new HttpException('Користувач з такою поштою вже існує', HttpStatus.BAD_REQUEST)
         }
         const hashPassword = await bcrypt.hash(userDto.password, 5);
         const user = await this.userService.createUser({
@@ -46,6 +46,6 @@ export class AuthService {
         if (user && passwordEquals) {
             return user
         }
-        throw new UnauthorizedException({ message: 'Невірний емайл або пароль' });
+        throw new UnauthorizedException({ message: 'Невірний email або пароль' });
     }
 }
