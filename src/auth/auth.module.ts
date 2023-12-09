@@ -5,6 +5,7 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { TokenModule } from "../token/token.module";
+import { tokenTimeConfig } from "./config/token-timeConfig";
 
 @Module({
   controllers: [AuthController],
@@ -12,13 +13,9 @@ import { TokenModule } from "../token/token.module";
   imports: [
       TokenModule,
     forwardRef(() => UsersModule),
-    JwtModule.register({
-      secret: process.env.PRIVATE_KEY || 'SECRET',
-      signOptions: {
-        expiresIn: '24h',
-      },
-    }),
+    JwtModule.register(tokenTimeConfig()),
   ],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
+y

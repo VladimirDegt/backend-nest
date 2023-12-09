@@ -13,11 +13,10 @@ export class TokenService {
     }
     async saveTokens (dto: CreateTokenDto){
         const { user, tokens } = dto;
-
         const newToken = new Token();
         newToken.accessToken = tokens.accessToken;
         newToken.refreshToken = tokens.refreshToken;
-        newToken.user = user // Предположим, что здесь user._id - это строка
+        newToken.user = user
 
         const createdToken = new this.tokenRepository(newToken);
         return createdToken.save();
