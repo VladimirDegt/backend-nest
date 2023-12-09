@@ -26,8 +26,8 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Отримання усіх користувачів' })
   @ApiResponse({ status: 200, type: [User] })
-  //@UseGuards(JwtAuthGuard) // обмеження доступу до роута не залогіненим користувачам
-  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard) // обмеження доступу до роута не залогіненим користувачам
+  // @Roles('ADMIN')
   @UseGuards(RolesGuard)
   @Get()
   getAll() {

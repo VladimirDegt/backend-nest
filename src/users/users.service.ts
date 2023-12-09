@@ -13,7 +13,7 @@ export class UsersService {
     constructor(
         @InjectModel(User.name)
         private userRepository: Model<UserDocument>,
-        private roleService: RolesService
+        private roleService: RolesService,
     ) { }
 
     async createUser(dto: CreateUserDto): Promise<User> {

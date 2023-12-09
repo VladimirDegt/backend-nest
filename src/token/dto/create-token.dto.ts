@@ -1,26 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  Length,
-  NotContains,
-} from 'class-validator';
+import { User } from "../../users/user.schema";
 
+interface ITokens {
+  refreshToken: string,
+  accessToken: string
+}
 export class CreateTokenDto {
-  @ApiProperty({
-    example: 'example@gmail.com',
-    description: 'Пошта користувача',
-  })
-  @IsString({ message: 'Дані повині бути строкою' })
-  @IsEmail({}, { message: 'Некоректний email' })
-  @IsNotEmpty({ message: 'Поле email відсутнє або пусте' })
-  readonly email: string;
-
-  @ApiProperty({ example: '12345', description: 'Пароль користувача' })
-  @IsString({ message: 'Дані повинні бути строкою' })
-  @Length(4, 16, { message: 'Не менше 4 та не більше 16 символів' })
-  @IsNotEmpty({ message: 'Поле password відсутнє або пусте' })
-  @NotContains(' ', { message: 'Пароль не повинен містити пробіли' })
-  readonly password: string;
+  readonly user: User
+  readonly tokens: ITokens
 }
