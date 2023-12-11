@@ -18,4 +18,3 @@ import { tokenTimeConfig } from "./config/token-timeConfig";
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
-y

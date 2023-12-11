@@ -9,6 +9,14 @@ import {
 
 export class CreateUserDto {
   @ApiProperty({
+    example: 'MyName',
+    description: "Ім'я користувача",
+  })
+  @IsString({ message: 'Дані повині бути строкою' })
+  @IsNotEmpty({ message: 'Поле username відсутнє або пусте' })
+  readonly username: string;
+
+  @ApiProperty({
     example: 'example@gmail.com',
     description: 'Пошта користувача',
   })
