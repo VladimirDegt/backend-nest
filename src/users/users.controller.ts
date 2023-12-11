@@ -14,41 +14,41 @@ import { ValidationPipe } from "../pipes/validation.pipe";
 @ApiTags('Користувачі')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+    constructor(private readonly usersService: UsersService) { }
 
-  @ApiOperation({ summary: 'Створення користувача' })
-  @ApiResponse({ status: 201, type: User })
-  @UsePipes(ValidationPipe)
-  @Post()
-  create(@Body() userDto: CreateUserDto) {
-    return this.usersService.createUser(userDto);
-  }
+    @ApiOperation({ summary: 'Створення користувача' })
+    @ApiResponse({ status: 201, type: User })
+    @UsePipes(ValidationPipe)
+    @Post()
+    create(@Body() userDto: CreateUserDto) {
+        return this.usersService.createUser(userDto);
+    }
 
-  @ApiOperation({ summary: 'Отримання усіх користувачів' })
-  @ApiResponse({ status: 200, type: [User] })
-  @UseGuards(JwtAuthGuard) // обмеження доступу до роута не залогіненим користувачам
-  // @Roles('ADMIN')
-  @UseGuards(RolesGuard)
-  @Get()
-  getAll() {
-    return this.usersService.getAllUsers();
-  }
+    @ApiOperation({ summary: 'Отримання усіх користувачів' })
+    @ApiResponse({ status: 200, type: [User] })
+    @UseGuards(JwtAuthGuard) // обмеження доступу до роута не залогіненим користувачам
+    @Roles('ADMIN')
+    //   @UseGuards(RolesGuard)
+    @Get()
+    getAll() {
+        return this.usersService.getAllUsers();
+    }
 
-  @ApiOperation({ summary: 'Надання ролі' })
-  @ApiResponse({ status: 200 })
-  // @Roles('ADMIN') обмеження доступу до роута користувачам, що не мают ролі ADMIN
-  // @UseGuards(RolesGuard)
-  @Post('/role')
-  addRole(@Body() dto: AddRoleDto) {
-    return this.usersService.addRole(dto);
-  }
+    @ApiOperation({ summary: 'Надання ролі' })
+    @ApiResponse({ status: 200 })
+    // @Roles('ADMIN') обмеження доступу до роута користувачам, що не мают ролі ADMIN
+    // @UseGuards(RolesGuard)
+    @Post('/role')
+    addRole(@Body() dto: AddRoleDto) {
+        return this.usersService.addRole(dto);
+    }
 
-  @ApiOperation({ summary: 'Забанити користувача' })
-  @ApiResponse({ status: 200 })
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard)
-  @Post('/ban')
-  ban(@Body() dto: BanUserDto) {
-    return this.usersService.ban(dto);
-  }
+    @ApiOperation({ summary: 'Забанити користувача' })
+    @ApiResponse({ status: 200 })
+    @Roles('ADMIN')
+    @UseGuards(RolesGuard)
+    @Post('/ban')
+    ban(@Body() dto: BanUserDto) {
+        return this.usersService.ban(dto);
+    }
 }

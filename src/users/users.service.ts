@@ -22,7 +22,7 @@ export class UsersService {
         });
         if (candidate) {
             throw new HttpException(
-                'Такий користувач існує',
+                'Користувач з такою поштою вжє інсує',
                 HttpStatus.BAD_REQUEST,
             );
         }
