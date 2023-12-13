@@ -34,8 +34,14 @@ export class AuthService {
           password: hashPassword,
         });
         const tokens = await this.generateToken(user);
-        await this.tokenService.saveTokens({ user, tokens });
-        return { refreshToken: tokens.refreshToken }
+        const tokenId = await this.tokenService.saveTokens({ user, tokens });
+        await this.userService.saveTokens({ user, tokenId });
+        return {
+            token: tokenId._id,
+            username: user.username,
+            email: user.email,
+            role: user.roles,
+        };
     }
 
     private async generateToken(user: User) {

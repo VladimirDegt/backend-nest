@@ -7,6 +7,7 @@ import { RolesService } from 'src/roles/roles.service';
 import { AddRoleDto } from "./dto/add-role.dto";
 import { BanUserDto } from "./dto/ban-user.dto";
 import { HttpException } from "@nestjs/common/exceptions";
+import { CreateTokenDto } from "src/token/dto/create-token.dto";
 
 @Injectable()
 export class UsersService {
@@ -77,5 +78,19 @@ export class UsersService {
         user.banReason = dto.banReason;
         await user.save();
         return user
+    }
+
+    async saveTokens(dto): Promise<User> {
+        const user = await this.userRepository.findOne({
+          email: dto.user.email,
+        });
+        if (!user) {
+          throw new HttpException(
+            'Користувача з такою поштою не інсує',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+        await user.$set('tokens', dto.tokenId._id);
+        return user.save();
     }
 }

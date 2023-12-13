@@ -3,6 +3,7 @@ import mongoose, { HydratedDocument } from "mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "src/roles/roles.schema";
 import { Post } from "src/posts/posts.schema";
+import { Token } from "src/token/token.schema";
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -16,11 +17,11 @@ export type UserDocument = HydratedDocument<User>;
 export class User {
   @ApiProperty({
     example: 'MyName',
-    description: 'Ім\'я користувача',
+    description: "Ім'я користувача",
   })
   @Prop()
-    username: string;
-    
+  username: string;
+
   @ApiProperty({
     example: 'example@gmail.com',
     description: 'Пошта користувача',
@@ -53,6 +54,12 @@ export class User {
   })
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] })
   posts: Post[];
+
+  @ApiProperty({
+    description: 'Токен користувача',
+  })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Token' }] })
+  tokens: Token[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
