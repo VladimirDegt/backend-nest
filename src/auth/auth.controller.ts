@@ -1,7 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { User } from 'src/users/user.schema';
 import { AuthService } from './auth.service';
 
 @ApiTags('Авторизація')
@@ -39,5 +38,21 @@ export class AuthController {
   @Post('/registration')
   registration(@Body() userDto: CreateUserDto) {
     return this.authService.registration(userDto);
+  }
+
+  @ApiOperation({ summary: 'Логаут користувача' })
+  @ApiResponse({
+    status: 201,
+    content: {
+      'application/json': {
+        example: {
+          token: '21321321321',
+        },
+      },
+    },
+  })
+  @Post('/logout')
+  logout(@Body() tokenDto) {
+    return this.authService.logout(tokenDto.token);
   }
 }

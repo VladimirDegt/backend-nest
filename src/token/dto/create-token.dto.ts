@@ -8,3 +8,7 @@ export class CreateTokenDto {
   readonly user: User
   readonly tokens: ITokens
 }
+
+export type TokenOnly = {
+  token: string;
+};
