@@ -40,6 +40,12 @@ export class UsersService {
 
   async getUserByEmail(email: string) {
     const user = await this.userRepository.findOne({ email }).populate('roles');
+    if (!user) {
+      throw new HttpException(
+        'Користувача не знайдено',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return user;
   }
 

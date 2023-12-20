@@ -1,7 +1,7 @@
 export function tokenTimeConfig() {
     return {
-        secret: process.env.PRIVATE_KEY || 'SECRET',
+        secret: process.env.JWT_ACCESS_TOKEN || 'SECRET',
             signOptions: {
-        expiresIn: '24h',
+        expiresIn: '10m',
     }}
 }
