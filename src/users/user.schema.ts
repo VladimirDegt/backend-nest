@@ -26,7 +26,7 @@ export class User {
     example: 'example@gmail.com',
     description: 'Пошта користувача',
   })
-  @Prop()
+  @Prop({ unique: true })
   email: string;
 
   @ApiProperty({ example: '12345', description: 'Пароль користувача' })

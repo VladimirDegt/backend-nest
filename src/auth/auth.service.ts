@@ -10,6 +10,7 @@ import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'src/users/user.schema';
 import { TokenService } from 'src/token/token.service';
+import * as process from 'process';
 
 @Injectable()
 export class AuthService {
@@ -42,18 +43,17 @@ export class AuthService {
     const tokenId = await this.tokenService.saveTokens({ user, tokens });
     await this.userService.saveTokens({ user, tokenId });
     return {
-      token: tokenId._id,
+      tokens,
       username: user.username,
       email: user.email,
-      role: user.roles,
     };
   }
 
   private async generateToken(user: User) {
     const payload = { email: user.email, roles: user.roles };
     return {
-      refreshToken: this.jwtService.sign(payload),
-      accessToken: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign({ ...payload, key: process.env.JWT_ACCESS_TOKEN }, {expiresIn: '15m'}),
+      refreshToken: this.jwtService.sign({ ...payload, key: process.env.JWT_REFRESH_TOKEN }, {expiresIn: '30d'}),
     };
   }
 

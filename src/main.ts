@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 // import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ValidationPipe } from "./pipes/validation.pipe";
+import * as cookieParser from 'cookie-parser';
 
 async function start() {
     const PORT = process.env.PORT || 5000;
@@ -10,6 +11,8 @@ async function start() {
 
     // CORS
     app.enableCors();
+    // cookie
+    app.use(cookieParser());
 
     // swagger
     const config = new DocumentBuilder()

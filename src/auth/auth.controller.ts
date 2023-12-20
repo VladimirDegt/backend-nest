@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get, Req, Res } from '@nestjs/common';
+import { Request, Response  } from 'express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
@@ -36,8 +37,14 @@ export class AuthController {
     },
   })
   @Post('/registration')
-  registration(@Body() userDto: CreateUserDto) {
-    return this.authService.registration(userDto);
+  async registration(@Body() userDto: CreateUserDto, @Res({ passthrough: true }) response: Response) {
+    const {tokens, username, email} = await this.authService.registration(userDto);
+    response.cookie('refreshToken', tokens.refreshToken)
+    return {
+      token: tokens.accessToken,
+      username: username,
+      email: email
+    }
   }
 
   @ApiOperation({ summary: 'Логаут користувача' })
@@ -54,5 +61,21 @@ export class AuthController {
   @Post('/logout')
   logout(@Body() tokenDto) {
     return this.authService.logout(tokenDto.token);
+  }
+
+  @ApiOperation({summary: 'Рефреш токен'})
+  @ApiResponse({
+    status: 201,
+    content: {
+      'application/json': {
+        example: {
+          token: '21321321321',
+        },
+      },
+    },
+  })
+  @Get('/refresh')
+  refresh(@Req() request: Request) {
+    console.log(request.cookies)
   }
 }
