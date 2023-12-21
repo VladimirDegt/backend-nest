@@ -47,6 +47,17 @@ export class TokenService {
         return findToken._id
     }
 
+    public async getIdRefreshToken(dto: string) {
+        const findToken = await this.tokenRepository.findOne({refreshToken: dto})
+        if(!findToken) {
+            throw new HttpException(
+              'Токена не існує',
+              HttpStatus.BAD_REQUEST,
+            );
+        }
+        return findToken._id
+    }
+
     public async deleteTokenById (dto: Types.ObjectId) {
         const findToken =  await this.getById(dto)
         if(!findToken) {

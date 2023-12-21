@@ -126,4 +126,13 @@ export class UsersService {
     }
     return user._id
   }
+
+  async getUserByID(dto: Types.ObjectId): Promise<User> {
+      const user = await this.userRepository.findById(dto);
+      if (!user) {
+          throw new HttpException('Користувача не інсує', HttpStatus.BAD_REQUEST);
+      }
+      return user
+  }
+
 }

@@ -88,4 +88,33 @@ export class AuthService {
           user: userId
         };
   }
+
+  public async refresh(refreshToken){
+    if(!refreshToken){
+      throw new UnauthorizedException({ message: 'Токен відсутній' })
+    }
+    const validateToken = await this.jwtService.verify(refreshToken);
+    if(!validateToken) {
+      throw new HttpException(
+        'Не валідний токен',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const findToken = await this.tokenService.getIdRefreshToken(refreshToken);
+      if (!findToken) {
+        throw new UnauthorizedException({ message: 'Токен відсутній' })
+      }
+
+      const userId = await this.userService.getUserByIdToken(findToken);
+      const user = await this.userService.getUserByID(userId)
+    const tokens = await this.generateToken(user);
+    const tokenId = await this.tokenService.saveTokens({ user, tokens });
+    await this.userService.saveTokens({ user, tokenId });
+    return {
+      tokens,
+      username: user.username,
+      email: user.email,
+    };
+  }
 }
