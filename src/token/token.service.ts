@@ -24,18 +24,8 @@ export class TokenService {
         return createdToken.save();
     }
 
-    public async getById(dto: string) {
-        
-        let objectId: Types.ObjectId;
-            try {
-              objectId = new Types.ObjectId(dto);
-            } catch (error) {
-              throw new HttpException(
-                'Неверний формат id токена',
-                HttpStatus.BAD_REQUEST,
-              );
-        }
-        const findToken = await this.tokenRepository.findById(objectId);
+    public async getById(dto: Types.ObjectId ) {
+        const findToken = await this.tokenRepository.findById(dto);
 
         if (!findToken) {
             throw new HttpException(
@@ -43,7 +33,29 @@ export class TokenService {
                 HttpStatus.BAD_REQUEST,
             );
         }
-        await this.tokenRepository.findByIdAndDelete(findToken._id);
-        return findToken.user
+        return findToken
+    }
+
+    public async getIdAccessToken(dto: string) {
+        const findToken = await this.tokenRepository.findOne({accessToken: dto})
+        if(!findToken) {
+            throw new HttpException(
+              'Токена не існує',
+              HttpStatus.BAD_REQUEST,
+            );
+        }
+        return findToken._id
+    }
+
+    public async deleteTokenById (dto: Types.ObjectId) {
+        const findToken =  await this.getById(dto)
+        if(!findToken) {
+            throw new HttpException(
+              'Токена не існує',
+              HttpStatus.BAD_REQUEST,
+            );
+        }
+        await this.tokenRepository.findByIdAndDelete(dto)
+        return findToken
     }
 }

@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from "./user.schema";
-import { Model } from "mongoose";
+import { Model, Types } from 'mongoose';
 import { CreateUserDto } from "./dto/create-user.dto";
 import { RolesService } from 'src/roles/roles.service';
 import { AddRoleDto } from "./dto/add-role.dto";
@@ -110,17 +110,20 @@ export class UsersService {
     return user;
   }
 
-  async deleteToken(dto: User) {
+  async deleteToken(dto: Types.ObjectId) {
     const user = await this.userRepository.findById(dto);
     if (!user) {
       throw new HttpException('Користувача не інсує', HttpStatus.BAD_REQUEST);
     }
     const result = await this.userRepository.findByIdAndUpdate(dto, {tokens: []});
-      return {
-          username: result.username,
-          email: result.email,
-          roles: result.roles,
-          posts: result.posts
-    };
+      return user._id
+  }
+
+  async getUserByIdToken(dto: Types.ObjectId): Promise<Types.ObjectId> {
+    const user = await this.userRepository.findOne({ tokens: { $in: [dto] } })
+    if (!user) {
+      throw new HttpException('Користувача не інсує', HttpStatus.BAD_REQUEST);
+    }
+    return user._id
   }
 }

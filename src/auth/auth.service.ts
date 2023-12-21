@@ -11,6 +11,7 @@ import * as bcrypt from 'bcryptjs';
 import { User } from 'src/users/user.schema';
 import { TokenService } from 'src/token/token.service';
 import * as process from 'process';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -77,7 +78,14 @@ export class AuthService {
   }
 
     public async logout(token: string) {
-        const userId = await this.tokenService.getById(token);
-        return await this.userService.deleteToken(userId);
+        const tokenId: Types.ObjectId = await this.tokenService.getIdAccessToken(token);
+        const deleteToken = await this.tokenService.deleteTokenById(tokenId);
+        const userId = await this.userService.getUserByIdToken(tokenId);
+        await this.userService.deleteToken(userId);
+        return {
+          message: "Токен видалено",
+          accessToken: deleteToken.accessToken,
+          user: userId
+        };
   }
 }

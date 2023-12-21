@@ -3,6 +3,7 @@ import { Request, Response  } from 'express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
+import { TokenOnly } from '../token/dto/create-token.dto';
 
 @ApiTags('Авторизація')
 @Controller('auth')
@@ -43,9 +44,9 @@ export class AuthController {
     },
   })
   @Post('/registration')
-  async registration(@Body() userDto: CreateUserDto, @Res({ passthrough: true }) response: Response) {
+  async registration(@Body() userDto: CreateUserDto, @Res({ passthrough: true }) res: Response) {
     const {tokens, username, email} = await this.authService.registration(userDto);
-    response.cookie('refreshToken', tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true})
+    res.cookie('refreshToken', tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true})
     return {
       token: tokens.accessToken,
       username: username,
@@ -65,7 +66,8 @@ export class AuthController {
     },
   })
   @Post('/logout')
-  logout(@Body() tokenDto) {
+  logout(@Body() tokenDto:TokenOnly, @Res({ passthrough: true }) res: Response) {
+    res.clearCookie('refreshToken')
     return this.authService.logout(tokenDto.token);
   }
 
