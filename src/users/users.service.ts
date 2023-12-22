@@ -49,6 +49,16 @@ export class UsersService {
     return user;
   }
 
+  async checkUserForRegistration(email: string): Promise<void> {
+    const user = await this.userRepository.findOne({ email });
+    if (user) {
+      throw new HttpException(
+          'Така пошта вже зареєстрована',
+          HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
   async addRole(dto: AddRoleDto) {
     const user = await this.userRepository.findOne({
       _id: dto.userId,

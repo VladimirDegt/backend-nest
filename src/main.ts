@@ -10,7 +10,12 @@ async function start() {
     const app = await NestFactory.create(AppModule);
 
     // CORS
-    app.enableCors();
+    app.enableCors({
+        credentials: true,
+        origin: [
+            "http://localhost:3002",
+        ]
+    });
     // cookie
     app.use(cookieParser());
 

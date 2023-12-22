@@ -12,6 +12,7 @@ import { User } from 'src/users/user.schema';
 import { TokenService } from 'src/token/token.service';
 import * as process from 'process';
 import { Types } from 'mongoose';
+import { CreateTokenDto } from '../token/dto/create-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,19 +35,13 @@ export class AuthService {
   }
 
   async registration(userDto: CreateUserDto) {
-      const candidate = await this.userService.getUserByEmail(userDto.email);
-      
-    if (candidate) {
-      throw new HttpException(
-        'Користувач з такою поштою вже існує',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    await this.userService.checkUserForRegistration(userDto.email);
     const hashPassword = await bcrypt.hash(userDto.password, 5);
     const user = await this.userService.createUser({
       ...userDto,
       password: hashPassword,
     });
+
     const tokens = await this.generateToken(user);
     const tokenId = await this.tokenService.saveTokens({ user, tokens });
     await this.userService.saveTokens({ user, tokenId });
