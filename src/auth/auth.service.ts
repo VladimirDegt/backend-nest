@@ -55,8 +55,8 @@ export class AuthService {
   private async generateToken(user: User) {
     const payload = { email: user.email, roles: user.roles };
     return {
-      accessToken: this.jwtService.sign({ ...payload, key: process.env.JWT_ACCESS_TOKEN }, {expiresIn: '15m'}),
-      refreshToken: this.jwtService.sign({ ...payload, key: process.env.JWT_REFRESH_TOKEN }, {expiresIn: '30d'}),
+      accessToken: this.jwtService.sign(payload),
+      refreshToken: this.jwtService.sign(payload),
     };
   }
 
@@ -69,7 +69,10 @@ export class AuthService {
     if (user && passwordEquals) {
       return user;
     }
-    throw new UnauthorizedException({ message: 'Невірний email або пароль' });
+    throw new HttpException(
+        'Невірна пошта або пароль',
+        HttpStatus.BAD_REQUEST,
+      );
   }
 
     public async logout(token: string) {

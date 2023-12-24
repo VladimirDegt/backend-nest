@@ -11,10 +11,19 @@ import { tokenTimeConfig } from "./config/token-timeConfig";
   controllers: [AuthController],
   providers: [AuthService],
   imports: [
-      TokenModule,
+    TokenModule,
     forwardRef(() => UsersModule),
-    JwtModule.register(tokenTimeConfig()),
+    JwtModule.register({
+    //   global: true,
+        secret: process.env.JWT_ACCESS_TOKEN,
+    //   signOptions: {
+    //     expiresIn: '10m',
+    //   },
+    }),
   ],
-  exports: [AuthService, JwtModule],
+    exports: [
+        AuthService,
+        JwtModule
+    ],
 })
 export class AuthModule {}
