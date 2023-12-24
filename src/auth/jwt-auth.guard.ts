@@ -1,7 +1,8 @@
-import { CanActivate, ExecutionContext, UnauthorizedException } from "@nestjs/common";
+import { CanActivate, ExecutionContext, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { Observable } from "rxjs";
 import {JwtService } from "@nestjs/jwt"
 import { Injectable } from "@nestjs/common/decorators";
+import { HttpException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -19,19 +20,13 @@ export class JwtAuthGuard implements CanActivate {
             const token = authHeader.split(" ")[1]
 
             if (bearer !== "Bearer" || !token) {
-                throw new UnauthorizedException({
-                    message: 'Користувач не авторизован',
-                });
+                return false
             }
-            console.log('token-->', token);
-            const user = this.jwtService.verify(token, {
-              secret: process.env.JWT_ACCESS_TOKEN,
-            });
+            const user = this.jwtService.verify(token);
             req.user = user;
             return true
             
         } catch (e) {
-            console.error('Token verification failed:', e);
             throw new UnauthorizedException({
                 message: "Користувач не авторизован"
             })

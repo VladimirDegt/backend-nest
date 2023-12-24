@@ -13,13 +13,7 @@ import { tokenTimeConfig } from "./config/token-timeConfig";
   imports: [
     TokenModule,
     forwardRef(() => UsersModule),
-    JwtModule.register({
-    //   global: true,
-        secret: process.env.JWT_ACCESS_TOKEN,
-    //   signOptions: {
-    //     expiresIn: '10m',
-    //   },
-    }),
+    JwtModule.register(tokenTimeConfig()),
   ],
     exports: [
         AuthService,
