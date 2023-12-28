@@ -22,9 +22,10 @@ export class FilesService {
                 dynamicTyping: false,
                 encoding: "utf8",
             })
-
-             const result = await sendEmailFromGoogle(parsedCsv, 'degtyarevvladimirr234234234234@gmail.com')
-            console.log('result-->', result)
+            parsedCsv.data.map(async item => {
+                    const result = await sendEmailFromGoogle(item)
+                    console.log('result-->', result)
+                } )
         } catch (e) {
             throw new HttpException(`${e.message}`, HttpStatus.INTERNAL_SERVER_ERROR)
         }

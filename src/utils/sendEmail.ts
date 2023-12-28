@@ -3,8 +3,8 @@ import * as process from 'process';
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
-export async function sendEmailFromGoogle(data, emailOrganization) {
-    // try {
+export async function sendEmailFromGoogle(data) {
+
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -20,18 +20,18 @@ export async function sendEmailFromGoogle(data, emailOrganization) {
             },
         });
 
-        const formattedData = data.data.map(item => {
-            return `
+        const formattedData = `
             <tr>
-                <td>${item['Номер']}</td>
-                <td>${item['Замовник']}</td>
+                <td>${data['Номер']}</td>
+                <td>${data['Замовник']}</td>
+                <td>${data['Стан оплати']}</td>
+                <td>${data['Пеня за прострочення платежу']}</td>
             </tr>
-        `;
-        }).join('');
+        `
 
         const mailOptions = {
             from: process.env.EMAIL,
-            to: emailOrganization,
+            to: data['Email замовника'],
             subject: `Тестування`,
             html: `
             <h4>Таблица:</h4>
@@ -39,6 +39,8 @@ export async function sendEmailFromGoogle(data, emailOrganization) {
                 <tr>
                     <th>Номер</th>
                     <th>Замовник</th>
+                    <th>Стан оплати</th>
+                    <th>Пеня за прострочення платежу</th>
                 </tr>
                 ${formattedData}
             </table>
@@ -48,10 +50,26 @@ export async function sendEmailFromGoogle(data, emailOrganization) {
     return new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
-                console.log('err.message-->', err.message)
-                reject(new Error('Помилка при відправці листа: ' + err));
+                reject(new Error(`
+                {
+                    name: ${data['Номер']},
+                    customer: ${data['Замовник']},
+                    debt: ${data['Стан оплати']},
+                    penalty: ${data['Пеня за прострочення платежу']},
+                    email: ${data['Email замовника']},
+                    status: ${err}
+                }
+                `))
+                // reject(new Error('Помилка при відправці листа: ' + err));
             } else {
-                resolve(`Лист відправлено на пошту ${emailOrganization}`);
+                resolve({
+                    name: data['Номер'],
+                    customer: data['Замовник'],
+                    debt: data['Стан оплати'],
+                    penalty: data['Пеня за прострочення платежу'],
+                    email: data['Email замовника'],
+                    status: 'доставлено'
+                    })
             }
         });
     });
