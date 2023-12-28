@@ -2,28 +2,53 @@ import * as process from 'process';
 
 require('dotenv').config();
 const nodemailer = require('nodemailer');
+const xoauth2 = require('xoauth2');
 
-export async function sendEmailFromGoogle (data, emailOrganization) {
-
+export async function sendEmailFromGoogle(data, emailOrganization) {
     const transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        service: 'gmail',
         auth: {
+            type: 'OAuth2',
             user: process.env.EMAIL,
-            pass: process.env.PASSWORD
-        }
+            clientId: process.env.CLIENT_ID,
+            clientSecret: process.env.CLIENT_SECRET,
+            refreshToken: process.env.REFRESH_TOKEN,
+            accessToken: process.env.ACCESS_TOKEN,
+        },
     });
 
+    const formattedData = data.data.map(item => {
+        return `
+            <tr>
+                <td>${item['Номер']}</td>
+                <td>${item['Замовник']}</td>
+            </tr>
+        `;
+    }).join('');
+
     const mailOptions = {
-        from: 'process.env.EMAIL',
+        from: process.env.EMAIL,
         to: emailOrganization,
         subject: `Тестування`,
-        html: `<h4 >${data}</h4>`
+        html: `
+            <h4>Таблица:</h4>
+            <table >
+                <tr>
+                    <th>Номер</th>
+                    <th>Замовник</th>
+                </tr>
+                ${formattedData}
+            </table>
+        `,
     };
 
     return new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
-                reject(new Error("Помилка при відправці листа: " + err));
+                reject(new Error('Помилка при відправці листа: ' + err));
             } else {
                 resolve(`Лист відправлено на пошту ${emailOrganization}`);
             }

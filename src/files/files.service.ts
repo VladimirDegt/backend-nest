@@ -25,9 +25,8 @@ export class FilesService {
             try{
                 await sendEmailFromGoogle(parsedCsv, 'degtyarevvladimirr@gmail.com')
             } catch (e) {
-                console.log('e.message-->', e.message)
+                throw new HttpException(`Помилка відправки пошти: ${e.message}`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            console.log('parsedCsv-->', parsedCsv)
             return fileName
         } catch (error) {
             throw new HttpException('Відбулася помилка при запису файла', HttpStatus.INTERNAL_SERVER_ERROR)
