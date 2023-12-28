@@ -7,7 +7,7 @@ const Papa = require("papaparse");
 
 @Injectable()
 export class FilesService {
-    async createFile(file): Promise<string> {
+    async createFile(file):Promise<void> {
         try {
             const fileName = uuid.v4() + '_' + file.originalname;
             const filePath = path.resolve(__dirname, '../', 'static');
@@ -22,14 +22,11 @@ export class FilesService {
                 dynamicTyping: false,
                 encoding: "utf8",
             })
-            try{
-                await sendEmailFromGoogle(parsedCsv, 'degtyarevvladimirr@gmail.com')
-            } catch (e) {
-                throw new HttpException(`Помилка відправки пошти: ${e.message}`, HttpStatus.INTERNAL_SERVER_ERROR)
-            }
-            return fileName
-        } catch (error) {
-            throw new HttpException('Відбулася помилка при запису файла', HttpStatus.INTERNAL_SERVER_ERROR)
+
+             const result = await sendEmailFromGoogle(parsedCsv, 'degtyarevvladimirr234234234234@gmail.com')
+            console.log('result-->', result)
+        } catch (e) {
+            throw new HttpException(`${e.message}`, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     } 
 }

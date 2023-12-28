@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -14,10 +14,11 @@ export class CustomersController {
     @ApiResponse({ status: 201 })
     @Post('/sendFile')
     @UseInterceptors(FileInterceptor('emailTable'))
-    createFile(@UploadedFile() file: Blob) {
-        this.customersService.create(file);
+    async createFile(@UploadedFile() file: Blob) {
+        await this.customersService.create(file);
         return ({
             message: 'Файл отримано',
         });
+
     }
 }
