@@ -22,27 +22,32 @@ export async function sendEmailFromGoogle(data, content: string) {
     });
 
     const formattedData = JSON.parse(content);
-
-    console.log('data-->', data);
-
-    const mailOptions = {
-        from: process.env.EMAIL,
-        to: data['Email замовника'],
-        subject: `Тестування`,
-        html: `Тест контента ${formattedData}`,
+    
+    const dataEmail: IDataEmail = {
+      number: data['Номер'],
+      customer: data['Замовник'],
+      debt: data['Стан оплати'],
+      penalty: data['Пеня за прострочення платежу'],
+      email: data['Email замовника'],
     };
 
-    const dataEmail: IDataEmail = {
-        name: data['Номер'],
-        customer: data['Замовник'],
-        debt: data['Стан оплати'],
-        penalty: data['Пеня за прострочення платежу'],
-        email: data['Email замовника'],
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: data['Email замовника'],
+      subject: `Тестування`,
+      html: `
+        ${formattedData}
+        ${dataEmail.customer}
+        ${dataEmail.number}
+        ${dataEmail.debt}
+        ${dataEmail.penalty}
+        `,
     };
 
     return new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
+                    console.log('err-->', err);
                 reject({
                     ...dataEmail,
                 })

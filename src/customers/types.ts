@@ -8,7 +8,7 @@ export interface UploadedFile {
 }
 
 export interface IDataEmail {
-    name: string,
+    number: string,
     customer: string,
     debt: string,
     penalty: string,
