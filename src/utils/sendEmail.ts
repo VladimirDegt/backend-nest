@@ -4,7 +4,7 @@ import { IDataEmail } from '../customers/types';
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
-export async function sendEmailFromGoogle(data) {
+export async function sendEmailFromGoogle(data, content: string) {
 
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -21,31 +21,15 @@ export async function sendEmailFromGoogle(data) {
         },
     });
 
-    const formattedData = `
-        <tr>
-            <td>${data['Номер']}</td>
-            <td>${data['Замовник']}</td>
-            <td>${data['Стан оплати']}</td>
-            <td>${data['Пеня за прострочення платежу']}</td>
-        </tr>
-    `;
+    const formattedData = JSON.parse(content);
+
+    console.log('data-->', data);
 
     const mailOptions = {
         from: process.env.EMAIL,
         to: data['Email замовника'],
         subject: `Тестування`,
-        html: `
-        <h4>Таблица:</h4>
-        <table >
-            <tr>
-                <th>Номер</th>
-                <th>Замовник</th>
-                <th>Стан оплати</th>
-                <th>Пеня за прострочення платежу</th>
-            </tr>
-            ${formattedData}
-        </table>
-    `,
+        html: `Тест контента ${formattedData}`,
     };
 
     const dataEmail: IDataEmail = {

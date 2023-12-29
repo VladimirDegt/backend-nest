@@ -3,6 +3,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreatePostDto } from '../posts/dto/create-post.dto';
+import { SendEmailDto } from './dto/send-email.dto';
 
 @ApiTags('Работа с замовниками')
 @Controller('customers')
@@ -14,9 +15,8 @@ export class CustomersController {
     @ApiResponse({ status: 201 })
     @Post('/sendFile')
     @UseInterceptors(FileInterceptor('emailTable'))
-    async createFile(@UploadedFile() file) {
+    async createFile(@Body() body:SendEmailDto, @UploadedFile() file) {
         await this.customersService.create(file);
-        return await this.customersService.sendEmail(file);
-
+        return await this.customersService.sendEmail(file, body.content);
     }
 }
