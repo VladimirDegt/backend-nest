@@ -14,11 +14,9 @@ export class CustomersController {
     @ApiResponse({ status: 201 })
     @Post('/sendFile')
     @UseInterceptors(FileInterceptor('emailTable'))
-    async createFile(@UploadedFile() file: Blob) {
+    async createFile(@UploadedFile() file) {
         await this.customersService.create(file);
-        return ({
-            message: 'Файл отримано',
-        });
+        return await this.customersService.sendEmail(file);
 
     }
 }
