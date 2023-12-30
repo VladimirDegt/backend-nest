@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FilesService } from '../files/files.service';
-import { sendEmailFromGoogle } from '../utils/sendEmail';
 import { SendEmailDto } from './dto/send-email.dto';
 import { UploadedFile } from './types';
+import { sendEmailForMeta } from '../utils/send-email-MetaUA';
 const Papa = require("papaparse");
+const iconv = require('iconv-lite');
 
 @Injectable()
 export class CustomersService {
@@ -15,15 +16,16 @@ export class CustomersService {
     }
 
     async sendEmail(file: UploadedFile, content: string) {
-        const parsedCsv = await Papa.parse(file.buffer.toString(), {
+        const buffer = iconv.decode(file.buffer, 'win1251');
+        const parsedCsv = await Papa.parse(buffer.toString(), {
             header: true,
             skipEmptyLines: true,
             dynamicTyping: false,
-            encoding: "utf8",
+            // encoding: "utf-8",
         })
         return await Promise.allSettled(
             parsedCsv.data.map(async item => {
-                return await sendEmailFromGoogle(item, content);
+                return await sendEmailForMeta(item, content);
             })
         )
     }
