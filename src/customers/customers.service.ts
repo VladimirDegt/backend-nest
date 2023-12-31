@@ -1,6 +1,5 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { FilesService } from '../files/files.service';
-import { SendEmailDto } from './dto/send-email.dto';
 import { UploadedFile } from './types';
 import { sendEmailForMeta } from '../utils/send-email-MetaUA';
 const Papa = require("papaparse");
@@ -21,7 +20,6 @@ export class CustomersService {
             header: true,
             skipEmptyLines: true,
             dynamicTyping: false,
-            // encoding: "utf-8",
         })
         return await Promise.allSettled(
             parsedCsv.data.map(async item => {

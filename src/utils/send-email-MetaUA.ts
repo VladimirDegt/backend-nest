@@ -23,8 +23,8 @@ export async function sendEmailForMeta(data, content: string) {
 
   const transport = nodemailer.createTransport(nodemailerConfig);
 
-  const formattedData = JSON.parse(content);
-  console.log("data-->", data)
+  const contentEmail = JSON.parse(content);
+ 
   const dataEmail: IDataEmail = {
     number: data['Номер'],
     customer: data['Замовник'],
@@ -34,10 +34,10 @@ export async function sendEmailForMeta(data, content: string) {
   };
 
   const mailOptions = {
-    to: 'degtyarevvladimirr@gmail.com',
+    to: data['Email замовника'],
     from: process.env.USER,
-    subject: "Тестування",
-    html: `${formattedData}
+    subject: 'Тестування',
+    html: `${contentEmail}
       <table border="1">
   <thead>
     <tr>
