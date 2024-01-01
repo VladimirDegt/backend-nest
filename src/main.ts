@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 // import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { ValidationPipe } from "./pipes/validation.pipe";
+import { ValidationPipe } from './pipes/validation.pipe';
 // import * as cookieParser from 'cookie-parser';
 const cookieParser = require('cookie-parser');
 
@@ -13,14 +13,14 @@ async function start() {
     // CORS
     app.enableCors({
         credentials: true,
-        origin: "*",
+        origin: true,
     });
     // cookie
     app.use(cookieParser());
 
     // swagger
     const config = new DocumentBuilder()
-        .setTitle('My template backend')
+        .setTitle('Template backend')
         .setDescription('Documentations REST API')
         .setVersion('1.0.0')
         .addTag('Volodymyr Dehtiarev')
@@ -28,16 +28,16 @@ async function start() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('/api/docs', app, document, {
         customSiteTitle: 'Backend Generator',
-            customfavIcon: 'https://avatars.githubusercontent.com/u/6936373?s=200&v=4',
+        customfavIcon: 'https://avatars.githubusercontent.com/u/6936373?s=200&v=4',
         customJs: [
-        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js',
-    ],
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js',
+        ],
         customCssUrl: [
-        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
-    ],
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
+        ],
     });
 
     // обмеження доступу до усіх роутів не залогіненим користувачам

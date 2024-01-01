@@ -10,6 +10,7 @@ import { RolesGuard } from "../auth/roles.guard";
 import { AddRoleDto } from "./dto/add-role.dto";
 import { BanUserDto } from "./dto/ban-user.dto";
 import { ValidationPipe } from "../pipes/validation.pipe";
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Користувачі')
 @Controller('users')
@@ -26,7 +27,7 @@ export class UsersController {
 
     @ApiOperation({ summary: 'Отримання усіх користувачів' })
     @ApiResponse({ status: 200, type: [User] })
-    // @UseGuards(JwtAuthGuard) // обмеження доступу до роута не залогіненим користувачам
+    @UseGuards(JwtAuthGuard) // обмеження доступу до роута не залогіненим користувачам
     @Roles('ADMIN')
     //   @UseGuards(RolesGuard)
     @Get()
