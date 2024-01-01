@@ -24,6 +24,7 @@ async function start() {
         .setDescription('Documentations REST API')
         .setVersion('1.0.0')
         .addTag('Volodymyr Dehtiarev')
+        .setBasePath('https://backend-nest-gold.vercel.app')
         .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('/api/docs', app, document, {
