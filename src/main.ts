@@ -15,7 +15,11 @@ async function start() {
         origin: "*",
     });
     // cookie
-    app.use(cookieParser());
+    try {
+        app.use(cookieParser());
+    } catch (e) {
+        console.log('e.message-->', e.message)
+    }
 
     // swagger
     const config = new DocumentBuilder()
