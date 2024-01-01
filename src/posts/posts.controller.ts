@@ -10,12 +10,12 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { Post as Post_entity } from './posts.schema';
 import { PostsService } from './posts.service';
 
-@ApiTags('Пости')
+@ApiTags('Статті')
 @Controller('posts')
 export class PostsController {
   constructor(private postService: PostsService) {}
 
-  @ApiOperation({ summary: 'Створення посту' })
+  @ApiOperation({ summary: 'Створення статті' })
   @ApiResponse({ status: 201, type: Post_entity })
   @Post()
   @UseInterceptors(FileInterceptor('image'))

@@ -10,11 +10,22 @@ import { ServeStaticModule } from '@nestjs/serve-static/dist';
 import { TokenModule } from './token/token.module';
 import { CustomersModule } from './customers/customers.module';
 import * as path from 'path';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
     controllers: [],
-    providers: [],
+    providers: [
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard
+        }
+    ],
     imports: [
+        ThrottlerModule.forRoot([{
+            ttl: 60000,
+            limit: 10,
+        }]),
         ConfigModule.forRoot({
             isGlobal: true,
         }),
