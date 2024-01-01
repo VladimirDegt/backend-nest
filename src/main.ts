@@ -12,9 +12,7 @@ async function start() {
     // CORS
     app.enableCors({
         credentials: true,
-        origin: [
-            "http://localhost:3002",
-        ]
+        origin: "*",
     });
     // cookie
     app.use(cookieParser());
