@@ -3,7 +3,8 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 // import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ValidationPipe } from "./pipes/validation.pipe";
-import * as cookieParser from 'cookie-parser';
+// import * as cookieParser from 'cookie-parser';
+const cookieParser = require('cookie-parser');
 
 async function start() {
     const PORT = process.env.PORT || 5000;
@@ -15,11 +16,7 @@ async function start() {
         origin: "*",
     });
     // cookie
-    try {
-        app.use(cookieParser());
-    } catch (e) {
-        console.log('e.message-->', e.message)
-    }
+    app.use(cookieParser());
 
     // swagger
     const config = new DocumentBuilder()
