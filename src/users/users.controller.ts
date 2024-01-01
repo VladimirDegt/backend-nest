@@ -4,7 +4,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { User } from "./user.schema";
 import { UseGuards } from "@nestjs/common/decorators";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+// import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { Roles } from "../auth/roles-auth.decorator";
 import { RolesGuard } from "../auth/roles.guard";
 import { AddRoleDto } from "./dto/add-role.dto";
@@ -26,7 +26,7 @@ export class UsersController {
 
     @ApiOperation({ summary: 'Отримання усіх користувачів' })
     @ApiResponse({ status: 200, type: [User] })
-    @UseGuards(JwtAuthGuard) // обмеження доступу до роута не залогіненим користувачам
+    // @UseGuards(JwtAuthGuard) // обмеження доступу до роута не залогіненим користувачам
     @Roles('ADMIN')
     //   @UseGuards(RolesGuard)
     @Get()
