@@ -7,8 +7,7 @@ const iconv = require('iconv-lite');
 
 @Injectable()
 export class CustomersService {
-    constructor(private fileService: FilesService) {
-    }
+    constructor(private fileService: FilesService) { }
 
     async create(file: UploadedFile) {
         await this.fileService.createFile(file);
@@ -21,10 +20,23 @@ export class CustomersService {
             skipEmptyLines: true,
             dynamicTyping: false,
         })
-        return await Promise.allSettled(
-            parsedCsv.data.map(async item => {
-                return await sendEmailForMeta(item, content);
-            })
-        )
+
+          const results = [];
+          for (const item of parsedCsv.data) {
+            const randomDelay = Math.random() * (20000 - 5000 + 1) + 5000;
+            await new Promise((resolve) => setTimeout(resolve, randomDelay));
+
+            try {
+              await sendEmailForMeta(item, content);
+              results.push({ status: 'fulfilled', value: item });
+            } catch (error) {
+              results.push({
+                status: 'rejected',
+                reason: error.message,
+                value: item,
+              });
+            }
+        }
+          return results;
+        }
     }
-}

@@ -36,30 +36,29 @@ export async function sendEmailForMeta(data, content: string) {
   const mailOptions = {
     to: data['Email замовника'],
     from: process.env.USER,
-    subject: 'Тестування',
-    html: `${contentEmail}
-      <table border="1">
-  <thead>
-    <tr>
-      <th>Номер</th>
-      <th>Замовник</th>
-      <th>Стан оплати</th>
-      <th>Пеня за прострочення платежу</th>
-      <th>Email замовника</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>${dataEmail.number}</td>
-      <td>${dataEmail.customer}</td>
-      <td>${dataEmail.debt}</td>
-      <td>${dataEmail.penalty}</td>
-      <td>${dataEmail.email}</td>
-    </tr>
-  </tbody>
-</table>
+    subject: 'Повідомлення КП "МІЦ"',
+    html: `${contentEmail}`
+//       <table border="1">
+//   <thead>
+//     <tr>
+//       <th>Номер</th>
+//       <th>Замовник</th>
+//       <th>Стан оплати</th>
+//       <th>Пеня за прострочення платежу</th>
+//       <th>Email замовника</th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     <tr>
+//       <td>${dataEmail.number}</td>
+//       <td>${dataEmail.customer}</td>
+//       <td>${dataEmail.debt}</td>
+//       <td>${dataEmail.penalty}</td>
+//       <td>${dataEmail.email}</td>
+//     </tr>
+//   </tbody>
+// </table>
 
-    `,
   };
 
   return new Promise((resolve, reject) => {
