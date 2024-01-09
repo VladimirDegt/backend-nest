@@ -33,4 +33,9 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Поле password відсутнє або пусте' })
   @NotContains(' ', { message: 'Пароль не повинен містити пробіли' })
   readonly password: string;
+
+  @ApiProperty({example: 'https://avatar.jpg', description: 'Аватар користувача'})
+  @IsString({ message: 'Посилання на файл у вигляді строки' })
+  @Length(10, 100, { message: 'Не менше 10 та не більше 100 символів' })
+  readonly avatar: string
 }

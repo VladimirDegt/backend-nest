@@ -8,6 +8,7 @@ import { AddRoleDto } from "./dto/add-role.dto";
 import { BanUserDto } from "./dto/ban-user.dto";
 import { HttpException } from "@nestjs/common/exceptions";
 import { CreateTokenDto } from "src/token/dto/create-token.dto";
+import * as path from 'path';
 
 @Injectable()
 export class UsersService {
@@ -27,7 +28,10 @@ export class UsersService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const user = new this.userRepository(dto);
+    const user = new this.userRepository({
+      ...dto,
+      avatar: path.resolve(__dirname, 'image', 'avatar.png')
+    });
     const role = await this.roleService.getRoleByValue('USER');
     await user.$set('roles', [role]);
     return user.save();

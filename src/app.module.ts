@@ -30,7 +30,7 @@ import { APP_GUARD } from '@nestjs/core';
             isGlobal: true,
         }),
         ServeStaticModule.forRoot({
-            rootPath: path.resolve(__dirname, 'static')
+            rootPath: path.resolve(__dirname, '../static')
         }),
         MongooseModule.forRoot(process.env.DB_URL),
         UsersModule,

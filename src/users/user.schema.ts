@@ -60,6 +60,13 @@ export class User {
   })
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Token' }] })
   tokens: Token[];
+
+  @ApiProperty({
+    example: 'https://avatar.jpg',
+    description: 'Аватар користувача'
+  })
+  @Prop()
+  avatar: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
