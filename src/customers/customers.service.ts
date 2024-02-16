@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FilesService } from '../files/files.service';
-import { UploadedFile } from './types';
+import { IValue, UploadedFile } from './types';
 import { sendEmailForMeta } from '../utils/send-email-MetaUA';
 const Papa = require("papaparse");
 const iconv = require('iconv-lite');
@@ -22,21 +22,44 @@ export class CustomersService {
         })
 
           const results = [];
-          for (const item of parsedCsv.data) {
+        
+      const resultObjSend = {}
+      parsedCsv.data.forEach(item => {
+        if(!resultObjSend.hasOwnProperty(item['Email замовника']) ){
+          resultObjSend[item['Email замовника']] = [
+            {
+              number: item['Номер'],
+              customer: item['Замовник'],
+              debt: item['Стан оплати'],
+              penalty: item['Пеня за прострочення платежу'],
+            }
+          ]
+        } else {
+          resultObjSend[item['Email замовника']].push({
+            number: item['Номер'],
+            customer: item['Замовник'],
+            debt: item['Стан оплати'],
+            penalty: item['Пеня за прострочення платежу'],
+          })
+        }
+      })
+
+      for (const [key, value] of Object.entries<{ [key: string]: IValue[] }>(resultObjSend)) {
             const randomDelay = Math.random() * (20000 - 5000 + 1) + 5000;
             await new Promise((resolve) => setTimeout(resolve, randomDelay));
 
             try {
-              await sendEmailForMeta(item, content);
-              results.push({ status: 'fulfilled', value: item });
+              await sendEmailForMeta([key, value], content);
+              results.push({ status: 'fulfilled', value: { email: key, customer: value} });
             } catch (error) {
               results.push({
                 status: 'rejected',
                 reason: error.message,
-                value: item,
+                value: key,
               });
             }
-        }
+          }
+
           return results;
         }
     }

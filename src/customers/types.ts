@@ -14,3 +14,10 @@ export interface IDataEmail {
     penalty: string,
     email: string,
 }
+
+export interface IValue {
+    number: string,
+    customer: string,
+    debt: string,
+    penalty: string,
+}

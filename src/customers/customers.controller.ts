@@ -11,7 +11,7 @@ import { CustomersService } from './customers.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SendEmailDto } from './dto/send-email.dto';
 
-@ApiTags('Обробка файла .csv та контенту')
+@ApiTags('Обробка файлу .csv та контенту')
 @Controller('customers')
 export class CustomersController {
     constructor(private customersService: CustomersService) {

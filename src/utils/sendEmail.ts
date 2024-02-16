@@ -32,18 +32,18 @@ export async function sendEmailFromGoogle(data, content: string) {
     };
 
     const mailOptions = {
-      from: process.env.EMAIL,
-      // to: data['Email замовника'],
+        from: process.env.EMAIL,
         to: 'degtyarevvladimirr@gmail.com',
       subject: `Тестування`,
-      html: `
-        ${formattedData}
-        `,
+      html: `${formattedData}`,
     };
+
+
     // ${dataEmail.customer}
     // ${dataEmail.number}
     // ${dataEmail.debt}
     // ${dataEmail.penalty}
+
 
     return new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (err, info) => {
