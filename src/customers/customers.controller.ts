@@ -27,6 +27,7 @@ export class CustomersController {
             throw new BadRequestException("Перевищено об'єм файлу у 3Mb");
         }
         await this.customersService.create(file);
-        return await this.customersService.sendEmail(file, body.content)
+        return await this.customersService.sendEmail(file)
+        // return await this.customersService.sendEmail(file, body.content)
     }
 }

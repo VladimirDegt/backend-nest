@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Інформаційний лист</title>
+
+  <style>
+    body {
+      font-family: "Times New Roman", serif;
+      font-weight: 300;
+      color: #161616;
+      margin: 0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    h1,h4,
+    p {
+      margin: 0;
+    }
+
+    section {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 16px;
+      background-color: #fffdf6;
+      font-size: 20px;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      font-family: "Times New Roman", serif;
+      font-weight: 400;
+      font-size: 32px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #808080;
+      border-radius: 24px;
+      border-spacing: 0 12px;
+      padding: 12px;
+      background: rgba(253, 253, 253, 0.5);
+      font-size: 10px;
+    }
+
+    .middle-cell {
+      min-width: 50px;
+    }
+
+    ul {
+      margin-bottom: 40px;
+    }
+
+    li {
+      line-height: 1.3;
+      max-width: 384px;
+    }
+
+
+    .details {
+      font-size: 14px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .container_details {
+      margin-left: 40px;
+    }
+
+    @media screen and (min-width: 768px) {
+      table {
+        font-size: 18px;
+      }
+
+      ul {
+        margin-bottom: 0;
+      }
+
+    }
+
+    @media screen and (min-width: 1280px) {
+      section {
+        padding: 80px;
+      }
+
+      table {
+        border-spacing: 0 24px;
+        padding: 24px;
+        font-size: 20px;
+      }
+
+      .middle-cell,
+      .before-last-cell {
+        text-align: center;
+      }
+
+      ul {
+        width: 550px;
+      }
+
+    }
+  </style>
+</head>
+<body>
+<section>
+  <h1>Шановний клієнте!</h1>
+  <p>Направляємо Вам цей лист, щоб нагадати про необхідність оплати за березень 2024 року. Будь ласка, зверніть увагу, що термін сплати закінчується 31 березня 2024 року.</p>
+  <p>&nbsp;</p>
+  <p>Інформація про розмір плати, яку потрібно сплатити для того, щоб не мати заборгованість:</p>
+  <table>
+    <thead>
+      <tr>
+        <th class="middle-cell">Назва</th>
+        <th class="middle-cell">Номер договору</th>
+        <th class="middle-cell">Стан оплати</th>
+        <th class="middle-cell">Пеня за прострочення платежу</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each customers}}
+      <tr>
+        <td class="middle-cell">{{customer}}</td>
+        <td class="middle-cell">{{number}} </td>
+        <td class="middle-cell">{{debt}} грн</td>
+        <td class="middle-cell">{{penalty}} грн</td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+
+
+    <p>Якщо у вас виникли будь-які питання або незрозумілості щодо оплати, будь ласка, звернитеся за контактним номером, який зазначений нижче. Ми завжди готові допомогти вам.</p>
+    <p>&nbsp;</p>
+    <p>Дякую за вашу увагу та співпрацю. Бажаю вам гарного дня!</p>
+    <p>&nbsp;</p>
+  <div class="container">
+    <div>
+      <p>З повагою,</p>
+      <p>Начальник договірного відділу</p>
+      <p>Дегтярев Володимир</p>
+      <p>Телефон, Viber, Telegram для консультації:</p>
+      <p><strong>+380 95 151 49 44 </strong><span>Світлана Іванівна</span></p>
+    </div>
+    <div class="container_details">
+      <h4>Реквізити КП МІЦ</h4>
+      <p class="details">61166, м. Харків, просп. Науки 38</p>
+      <p class="details">Код ЄДРПОУ 32135675</p>
+      <p class="details">IBAN UA 763510050000026002033891700 в АТ «УкрСиббанк»</p>
+      <p class="details">ІПН 321356720390, Витяг з реєстру пл. ПДВ. № 1620304501085</p>
+      <p class="details">Електронна адреса: <a href="mailto:kpgic@khmr.gov.ua" target="_blank" >kpgic@khmr.gov.ua</a></p>
+    </div>
+  </div>
+
+
+
+
+</section>
+</body>
+</html>
